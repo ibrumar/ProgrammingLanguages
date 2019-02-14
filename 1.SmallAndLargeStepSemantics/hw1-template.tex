@@ -1,0 +1,441 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{plcourse}
+\usepackage{ttquot}
+\usepackage{proof}
+\usepackage{stmaryrd}
+\usepackage{angle}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+\usepackage{xspace}
+\usepackage{floatflt,amsmath,amssymb}
+\usepackage[ligature, inference]{semantic}
+
+\homework{1}
+
+\newcommand{\largestep}[1]{\rulename{#1${}_{\text{Lrg}}$}}
+
+\begin{document}
+\hwsubheader
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%    Cover page
+%
+%
+\vspace{5cm}
+{\LARGE
+\begin{tabular}{rp{0.6\linewidth}}
+  Name:&\todo{Iulian Valentin Brumar}\\
+  HUID:&\todo{PUT YOUR HUID HERE}\\
+  Collaborators:&{\normalsize
+    \todo{Put your collaborators here, if any.}
+    }
+\end{tabular}
+}
+
+\vfill
+\textit{Make sure that the remaining pages of this assignment do not contain any identifying information.}
+\vfill
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%    Question 1
+%
+%
+
+\newpage
+\begin{question}{Semantics}{(25 points)}
+ 
+ \newcommand{\fact}[1]{\lamfnt{fact}~#1}
+ \newcommand{\modulo}[2]{#1~\lamfnt{mod}~#2}
+
+%%   Here are some useful macros/code for this questions. Try uncommenting them to see what they do.
+  \begin{subquestion}
+   In this exercise we have to extend the small step semantics to handle the factorial. \\
+
+   We need a rule that takes an expression to a new one. The $\sigma$ might change since another expression might be an assignment that changes the store. \\
+   
+   \infrule[FactExp]
+           {
+             <e, \sigma> \stepsone <e', \sigma'>
+           }
+           {
+             <\fact{e}, \sigma> \stepsone <\fact{e'}, \sigma'>
+           }
+           {
+           }
+
+    We do not include a rule that takes factorial(e) to factorial(n) since there is already a rule that maps expressions to naturals and we have defined above what happens in the general case of mapping an expression onto another expression. Next, we define an axiom for the factorial when it is applied to a number.
+
+
+   \infrule[Fact]
+           {
+             %<e, \sigma> \stepsone <n, \sigma'>
+           }
+           {
+             <\fact{n}, \sigma> \stepsone <m, \sigma>
+           }
+           {
+             where m is the factorial of n
+           }
+
+   \end{subquestion}
+   \begin{subquestion}
+   Extend the small step semantics to handle modulo expressions. \\
+
+   The rules are defined similarly to how we dealt with the factorial, but now with two operands and having to define the order of evaluation. In order to match the large step semantics, we first evaluate the first operand of the modulo operation.
+
+   \infrule[LMOD]
+           {
+             <e_1, \sigma> \stepsone <e_1', \sigma'>
+           }
+           {
+             <\modulo{e_1}{e_2}, \sigma> \stepsone <\modulo{e_1'}{e_2}, \sigma''>
+           }
+           {
+             %side condition
+           }
+
+
+   When the first operand is already an integer, we evaluate the second one.
+
+   \infrule[RMOD]
+           {
+             <e_2, \sigma> \stepsone <e_2', \sigma'>
+           }
+           {
+             <\modulo{n}{e_2}, \sigma> \stepsone <\modulo{n}{e_2'}, \sigma'>
+           }
+           {
+             %where m is the factorial of n
+           }
+
+
+   When both operands are integers, the axiomatic rule is:
+
+   \infrule[MOD]
+           {
+             %<e, \sigma> \stepsone <n, \sigma'>
+           }
+           {
+             <\modulo{n}{m}, \sigma> \stepsone <k, \sigma>
+           }
+           {
+             where k is n modulo m
+           }
+\end{subquestion}
+
+\begin{subquestion}
+What happens when we try to evaluate the expression $\modulo{(\fact{3})}{(-7)}$ having a store $\sigma_0$ that maps all the variables to 0.
+
+Let us first use the large step semantics:
+
+   \infrule[$MOD_{LRG}$]
+           {
+             %<e, \sigma> \stepsone <n, \sigma'>
+
+             \infrule[$FACT_{LRG}$]
+                     {
+                        \infrule[$INT_{LRG}$]
+                        {}
+                        {<3, \sigma_0> \stepsone <3, \sigma_0>}
+                     
+                     }
+                     {
+                        <\fact{3}, \sigma_0> \stepsto <6, \sigma_0>
+                     }  {}
+
+             \infrule[$INT_{LRG}$]
+                     {
+                       %<3, \sigma> \stepsone <3, \sigma>
+                     }
+                     {
+                       <-7, \sigma_0> \stepsto <-7, \sigma_0>
+                     }
+                     {}
+           }
+           {
+             <\modulo{(\fact{3})}{(-7)}, \sigma_0> \stepsto <1, \sigma_0>
+           }
+           {
+             where 1 is 6 mod -7
+           }
+    Since there is no assignment in the derivation tree, sigma stays the same.
+
+    With the small step semantics the resulting derivations in order to prove that we can make the step $<\modulo{(\fact{3})}{(-7)}, \sigma_0> \stepsone <\modulo{(6)}{(-7)}, \sigma_0>$.
+
+
+   \infrule[LMOD]
+           {
+             %<e, \sigma> \stepsone <n, \sigma'>
+
+             \infrule[$Fact$]
+                     {
+                     }
+                     {
+                        <\fact{3}, \sigma_0> \stepsto <6, \sigma_0>
+                     }  {}
+           }
+           {
+             <\modulo{(\fact{3})}{(-7)}, \sigma_0> \stepsone<1, \sigma_0>
+           }
+           {
+             %where 1 is 6 mod -7
+           }
+
+    Then to show that $<\modulo{(6)}{(-7)}, \sigma_0> \stepsone <1, \sigma_0>$.
+
+
+   \infrule[MOD]
+           {
+             %<e, \sigma> \stepsone <n, \sigma'>
+           }
+           {
+             <\modulo{(\fact{3})}{(-7)}, \sigma_0> \stepsone<1, \sigma_0>
+           }
+           {
+             where 1 is 6 mod -7
+           }
+
+   In both cases the $\sigma_0$ does not influence any of the derivations since there are no variable assignments involved.
+
+\end{subquestion}
+%   \infrule[FactExp]
+%           {
+%             a_1 \in A \quad a_2 \in A
+%           }
+%           {
+%             a \in A
+%           }
+%           {
+%             side condition
+%           }
+ 
+
+%  An example of inference rule
+%  \infrule[M]{  \infrule[N]{A \quad B}{C}{}  \quad D}{E}{} 
+
+
+%    \[
+%    <e, \sigma> \stepsone <e', \sigma'>
+%    \]
+%
+%    \[
+%    <e, \sigma> \stepsto <n, \sigma'>
+%    \]
+%
+% \[
+% e::= \dots \mid \fact{e} \mid \modulo{e_1}{e_2}
+% \]
+
+          
+          
+  
+\end{question}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%    Question 2
+%
+%
+
+\newpage
+\begin{question}{Binary Trees and Induction}{(25 points)}
+\newcommand{\tree}[3]{(#1,#2,#3)}
+\newcommand{\TreeSet}{\Set{Tree}\xspace}
+\newcommand{\SixTree}{\Set{SixTree}\xspace}
+\newcommand{\ROOT}{\ensuremath{\mathit{root}}}
+\newcommand{\rootf}[1]{\ROOT(#1)}
+
+  
+%%   Here are some useful macros/code for this questions. Try uncommenting them to see what they do.
+%% $\rootf{\tree{4}{5}{6}}$
+
+%% $t_1=$ \Tree [.5 [.7 [.-1 ] [.3 ] ] [.4 ] ] &
+
+%% $t_1 \cong t_2$
+
+%% \begin{itemize}
+%% \item Case 1 where $e \equiv n$...
+%% \item Case 2 where $e \equiv x$...
+%% \end{itemize}
+
+  
+  %% Question 2a
+  \begin{subquestion}
+    \todo{Answer Question {\thesubquestion} here.}
+  \end{subquestion}
+
+  %% Question 2b
+  \begin{subquestion}
+    \todo{Answer Question {\thesubquestion} here.}
+  \end{subquestion}
+
+  %% Question 2c
+  \begin{subquestion}
+    \todo{Answer Question {\thesubquestion} here.}
+  \end{subquestion}
+
+  %% Question 2d
+  \begin{subquestion} 
+    
+    \begin{subsubquestion}
+    \todo{Answer Question {\thesubsubquestion} here.}      
+    \end{subsubquestion}
+    \begin{subsubquestion}
+    \todo{Answer Question {\thesubsubquestion} here.}      
+    \end{subsubquestion}
+    \begin{subsubquestion}
+    \todo{Answer Question {\thesubsubquestion} here.}      
+    \end{subsubquestion}
+  \end{subquestion}
+
+
+  
+  \begin{subquestion}
+    \begin{subsubquestion}
+    \todo{Answer Question {\thesubsubquestion} here.}      
+    \end{subsubquestion}
+    \begin{subsubquestion}
+    \todo{Answer Question {\thesubsubquestion} here.}      
+    \end{subsubquestion}
+  \end{subquestion}
+\end{question}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%    Question 3
+%
+%
+
+\newpage
+\begin{question}{Proof by Induction}{(25 points)}
+
+%% Here are some useful macros/code for this questions. Try uncommenting them to see what they do.
+%% $<e, \sigma> \stepsone^* <e',\sigma'> \stepsone^* <e'',\sigma''>$
+
+  
+  %% Question 3a
+  \begin{subquestion}
+    \todo{Answer Question {\thesubquestion} here.}
+  \end{subquestion}
+
+  %% Question 3b
+  \begin{subquestion}
+    \todo{Answer Question {\thesubquestion} here.}
+    For all $<e,\sigma> \stepsone <e',\sigma'>$, we will prove the property $P(<e,\sigma> \stepsone <e',\sigma'>) = \dots$
+  \end{subquestion}
+
+  %% Question 3c
+  \begin{subquestion}
+    \todo{Answer Question {\thesubquestion} here.}
+
+%% \begin{itemize}
+%% \item Case 1 where XXX
+%% \item Case 2 where XXX
+%% \end{itemize}
+    
+  \end{subquestion}
+
+\end{question}
+
+
+
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%    Question 4
+%
+%
+
+\newpage
+\begin{question}{Stack-Oriented Programming}{(25 points)}
+
+\newcommand{\push}[1]{\ensuremath{\mathbf{push}\;#1}}
+\newcommand{\add}{\ensuremath{\mathbf{add}}}
+\newcommand{\mul}{\ensuremath{\mathbf{mul}}}
+\newcommand{\divcom}{\ensuremath{\mathbf{div}}}
+\newcommand{\pop}{\ensuremath{\mathbf{pop}}}
+\newcommand{\dup}{\ensuremath{\mathbf{dup}}}
+\newcommand{\swap}[1]{\ensuremath{\mathbf{swap}\;{#1}}}
+\newcommand{\seq}[2]{\ensuremath{#1; #2}}
+\renewcommand{\skip}{\ensuremath{\mathbf{skip}}}
+\newcommand{\WHILENE}{\ensuremath{\mathbf{whilene}}\xspace}
+\newcommand{\whilene}[1]{\ensuremath{\WHILENE\;\{#1\}}}
+\newcommand{\emptystack}{\ensuremath{[]}}
+\newcommand{\stack}{\ensuremath{S}}
+\newcommand{\cons}[2]{\ensuremath{#1 :: #2}}
+
+%% Here are some useful macros/code for this questions. Try uncommenting them to see what they do.
+%% $<\push{3}; \pop; \whilene{\push{6};\push{7};\mul}, \stack>$
+
+%% $<\push{8},S> \stepsto \cons{8}{S}$
+
+
+  \begin{subquestion}
+    \begin{subsubquestion}
+      Command $\push{n}$: \todo{Answer Question {\thesubquestion} here.}
+    \end{subsubquestion}
+    \begin{subsubquestion}
+      Command $\pop$: \todo{Answer Question {\thesubquestion} here.}
+    \end{subsubquestion}
+    \begin{subsubquestion}
+      Command $\add$: \todo{Answer Question {\thesubquestion} here.}
+    \end{subsubquestion}
+    \begin{subsubquestion}
+      Command $\mul$: \todo{Answer Question {\thesubquestion} here.}
+    \end{subsubquestion}
+    \begin{subsubquestion}
+      Command $\divcom$: \todo{Answer Question {\thesubquestion} here.}
+    \end{subsubquestion}
+    \begin{subsubquestion}
+      Command $\dup$: \todo{Answer Question {\thesubquestion} here.}
+    \end{subsubquestion}
+    \begin{subsubquestion}
+      Command $\swap{i}$: \todo{Answer Question {\thesubquestion} here.}
+    \end{subsubquestion}
+    \begin{subsubquestion}
+      Command $\seq{c_1}{c_2}$: \todo{Answer Question {\thesubquestion} here.}
+    \end{subsubquestion}
+    \begin{subsubquestion}
+      Command $\whilene{c}$: \todo{Answer Question {\thesubquestion} here.}
+    \end{subsubquestion}
+    \begin{subsubquestion}
+      Command $\skip$: \todo{Answer Question {\thesubquestion} here.}
+    \end{subsubquestion}
+
+  \end{subquestion}
+
+  % Question 4b
+  \begin{subquestion}
+    \todo{Answer Question {\thesubquestion} here.}
+  \end{subquestion}
+  
+  % Question 4c
+  \begin{subquestion}
+    \todo{Answer Question {\thesubquestion} here.}
+  \end{subquestion}
+  
+  % Question 4d
+  \begin{subquestion}
+    \todo{Answer Question {\thesubquestion} here.}
+  \end{subquestion}
+  
+  % Question 4e
+  \begin{subquestion}
+    \todo{Answer Question {\thesubquestion} here.}
+  \end{subquestion}
+  
+    
+\end{question}
+
+
+
+\end{document}
