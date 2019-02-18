@@ -323,13 +323,23 @@ Let us first use the large step semantics:
   
   %% Question 3a
   \begin{subquestion}
-    \todo{Answer Question {\thesubquestion} here.}
+  	 What is the inductive reasoning principle for the derivation of $<e, \sigma> \stepsone <e', \sigma'>$? Write it out in full.
+  	 
+  	 If
+  	 \begin{itemize}
+  	 \item $P(<e, \sigma> -> <n, \sigma'>)$ with $n \in \mathbb{Z}$.
+  	 \item $P(<e, \sigma> -> <x, \sigma'>)$ with $x \in Var$.
+   	 \item $\forall e_1 \in AExp$ and $e_2 \in Aexp$ if $P(<e_1, \sigma> -> <e_1', \sigma'>)$ and $P(<e_2, \sigma> -> <e_2', \sigma'>)$ then $P(<e_1+e_2, \sigma> -> <e_1'+e_2', \sigma'>)$.
+   	 \item $\forall e_1 \in AExp$ and $e_2 \in Aexp$ if $P(<e_1, \sigma> -> <e_1', \sigma'>)$ and $P(<e_2, \sigma> -> <e_2', \sigma'>)$ then $P(<e_1 \times e_2, \sigma> -> <e_1' \times e_2', \sigma'>)$.
+  	 \end{itemize}
+   	 then $\forall <e, \sigma> \in Config, \exists <e', \sigma'> \in Config, P(<e, \sigma> \stepsone <e', \sigma'>)$.
+  	 
+  	
   \end{subquestion}
 
   %% Question 3b
   \begin{subquestion}
-    \todo{Answer Question {\thesubquestion} here.}
-    For all $<e,\sigma> \stepsone <e',\sigma'>$, we will prove the property $P(<e,\sigma> \stepsone <e',\sigma'>) = \dots$
+    For all $<e,\sigma> \stepsone <e',\sigma'>$, we will prove the property $P(<e,\sigma> \stepsone <e',\sigma'>) =$ If $<e, \sigma> \stepsone <e',\sigma'> and <e', \sigma'> \stepsto <n, \sigma'>$ then $<e, \sigma> \stepsto <n, \sigma'>$.
   \end{subquestion}
 
   %% Question 3c
