@@ -327,10 +327,14 @@ Let us first use the large step semantics:
   	 
   	 If
   	 \begin{itemize}
-  	 \item $P(<e, \sigma> -> <n, \sigma'>)$ with $n \in \mathbb{Z}$.
-  	 \item $P(<e, \sigma> -> <x, \sigma'>)$ with $x \in Var$.
-   	 \item $\forall e_1 \in AExp$ and $e_2 \in Aexp$ if $P(<e_1, \sigma> -> <e_1', \sigma'>)$ and $P(<e_2, \sigma> -> <e_2', \sigma'>)$ then $P(<e_1+e_2, \sigma> -> <e_1'+e_2', \sigma'>)$.
-   	 \item $\forall e_1 \in AExp$ and $e_2 \in Aexp$ if $P(<e_1, \sigma> -> <e_1', \sigma'>)$ and $P(<e_2, \sigma> -> <e_2', \sigma'>)$ then $P(<e_1 \times e_2, \sigma> -> <e_1' \times e_2', \sigma'>)$.
+  	 \item $P(<x, \sigma> \stepsone <n, \sigma'>)$ with $x \in Var$ and $n \in \mathbb{Z}$.
+   	 \item $P(<n+m, \sigma> \stepsone <p, \sigma'>)$ with $n,m,p \in \mathbb{Z}$ and p being the sum of n and m.
+   	 \item $P(<n \times m, \sigma> \stepsone <p, \sigma'>)$ with $n,m,p \in \mathbb{Z}$ and p being the product of n and m.
+  	 %\item $P(<e, \sigma> \stepsone <x, \sigma'>)$ with $x \in Var$.
+%  	 \item $P(<e, \sigma> \stepsone <n, \sigma'>)$ with $n \in \mathbb{Z}$.
+   	 \item $\forall e_1, e_2 \in AExp$ if $P(<e_1, \sigma> \stepsone <e_1', \sigma'>)$ then $P(<e_1+e_2, \sigma> \stepsone <e_1'+e_2, \sigma'>)$.
+   	 \item $\forall e_2 \in AExp$ and $, \forall n \in \mathbb{Z}$ if $P(<e_2, \sigma> \stepsone <e_2', \sigma'>)$ then $P(<n+e_2, \sigma> \stepsone <n+e_2', \sigma'>)$.
+   	 \item $\forall e_1 \in AExp$ and $e_2 \in Aexp$ if $P(<e_1, \sigma> \stepsone <e_1', \sigma'>)$ and $P(<e_2, \sigma> \stepsone <e_2', \sigma'>)$ then $P(<e_1 \times e_2, \sigma> \stepsone <e_1' \times e_2', \sigma'>)$.
   	 \end{itemize}
    	 then $\forall <e, \sigma> \in Config, \exists <e', \sigma'> \in Config, P(<e, \sigma> \stepsone <e', \sigma'>)$.
   	 
@@ -344,12 +348,52 @@ Let us first use the large step semantics:
 
   %% Question 3c
   \begin{subquestion}
-    \todo{Answer Question {\thesubquestion} here.}
+  	
+  	 For each case mentioned in your inductive reasoning principle for $<e, \sigma> \stepsone <e', \sigma'>$, prove that case
+  	holds for the property you stated above. 
 
-%% \begin{itemize}
-%% \item Case 1 where XXX
-%% \item Case 2 where XXX
-%% \end{itemize}
+
+\begin{itemize}
+\item Case 1 where we have to show that $P(<e, \sigma> \stepsone <n, \sigma'>)$.
+
+The full statement we need to prove is: if $<e, \sigma> \stepsone <n, \sigma''>)$ and $<n, \sigma''> \stepsto <n, \sigma'>)$ then $<e, \sigma> \stepsto <n, \sigma'>$.
+
+%We can see that $\sigma = \sigma''$ since the only rules with the conclusion $<e, \sigma> \stepsone <n, \sigma''>$ are VAR, ADD and MUL. In all those cases the store does not change.
+
+From $<n, \sigma''> \stepsto <n, \sigma'>)$ we find that $\sigma'' = \sigma'$. This is true since the only large step semantics rule with $<n, \sigma''> \stepsto <n, \sigma'>$ as a conclusion is $INT_{LRG}$ and in that rule the store does not change.
+
+Since $\sigma'' = \sigma'$, we can transform the hypothesis $<e, \sigma> \stepsone <n, \sigma''>$ to $<e, \sigma> \stepsone <n, \sigma'>$. This implies that $<e, \sigma> \stepsone^* <n, \sigma'>$ and given that $<n, \sigma'>$ is a final configuration we conclude that $<e, \sigma> \stepsto <n, \sigma'>)$.
+
+
+
+\item Case 2 where we have to show that $P(<e, \sigma> \stepsone <x, \sigma'>)$.
+
+The argument proceeds similarly to Case 1.
+
+%We can see that $\sigma = \sigma''$ since the only rules with the conclusion $<e, \sigma> \stepsone <n, \sigma''>$ are VAR, ADD and MUL. In all those cases the store does not change.
+
+From $<x, \sigma''> \stepsto <n, \sigma'>)$ we deduce that $\sigma'' = \sigma'$. This is true since the only large step semantics rule with $<x, \sigma''> \stepsto <n, \sigma'>$ as a conclusion is $VAR_{LRG}$ having $\sigma'(x) = n$ and in that rule the store does not change.
+
+Since $\sigma'' = \sigma'$, we can transform the hypothesis $<e, \sigma> \stepsone <x, \sigma''>$ to $<e, \sigma> \stepsone <x, \sigma'>$. From the previous step we also know that $\sigma'(x) = n$, meaning that $<x, \sigma'> \stepsto <n, \sigma'>$ according to the small step semantics axiom VAR.
+
+
+Putting together the two small step semantics rules $<e, \sigma> \stepsone <x, \sigma'>$ and $<x, \sigma'> \stepsto <n, \sigma'>$ implies that $<e, \sigma> \stepsone^* <n, \sigma'>)$ and given that $<n, \sigma'>$ is a final configuration we conclude that $<e, \sigma> \stepsto <n, \sigma'>)$.
+
+\item Case 3 \todo{We have to do the proof for the assignment as well}.
+
+\item Case 4 where we have to show that $\forall e_1 \in AExp$ and $e_2 \in Aexp$ if $P(<e_1, \sigma> \stepsone <e_1', \sigma'>)$ and $P(<e_2, \sigma> \stepsone <e_2', \sigma'>)$ then $P(<e_1+e_2, \sigma> \stepsone <e_1'+e_2', \sigma'>)$.
+
+We want to prove that if $<e_1+e_2, \sigma> \stepsone <e_1'+e_2', \sigma''>$ and $<e_1'+e_2', \sigma''> \stepsto <n, \sigma'>$ then $<e_1+e_2, \sigma''> \stepsto <n, \sigma'>$.
+
+If $<e_1+e_2, \sigma> \stepsone <e_1'+e_2', \sigma''>$ it can only mean that 
+
+By the inductive hypothesis we know that $<e_1, \sigma> \stepsone <e_1', \sigma''>$ and $<e_1', \sigma''> \stepsto <n_1, \sigma'>$ then $<e_1', \sigma''> \stepsto <n_1, \sigma'>$.
+
+\item Case 5 \todo{Proof for addition with integer literal}.
+
+\item Case 6 Multiplication \todo{This is almost copy paste of the addition}
+
+\end{itemize}
     
   \end{subquestion}
 
