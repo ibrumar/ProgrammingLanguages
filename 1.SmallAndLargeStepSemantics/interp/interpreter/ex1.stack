@@ -1,0 +1,1 @@
+< push 0; whilene { pop; dup; push -1; +; push 0 }; pop, 3 :: [] >
