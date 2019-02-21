@@ -470,22 +470,52 @@ By the inductive hypothesis we know that $<e_1, \sigma> \stepsone <e_1', \sigma'
 
   % Question 4b
   \begin{subquestion}
-    \todo{Answer Question {\thesubquestion} here.}
+    < push 0; whilene { pop; dup; push -1; +; push 0 }; pop, 3 :: [] >
   \end{subquestion}
   
   % Question 4c
   \begin{subquestion}
-    \todo{Answer Question {\thesubquestion} here.}
+ Write a program in our toy language that takes as input a stack of the form n :: [] where $n \geq 0$ and
+finishes with a stack of the form 0 :: 1 :: 2 :: \dots :: n :: []. Briefly describe (in words) how your
+implementation works. (That is, help the grader understand why your code is correct!)
+
+The program we propose is:\\
+ \emph{push 0; whilene \{ pop; dup; push -1; add; push 0 \}; pop}
+ 
+ The idea is to keep a 0 on top of the stack before checking the condition of the while command, and to leave the number i+1 just underneath the top element (0) so that we can remember at each iteration to leave the element i (also under the top which should be 0).
+ 
+ The reason for leaving a 0 on top of the stack is because the algorithm must finish when the i'th element we have to compute is 0. The reason why we do a dup at the beginning of each iteration just before the pop of the top 0 value, is because we do not want to lose the i+1 value when computing the sum: we just want to subtract 1 from it for the current iteration.
+ 
+ Obviously before finishing the program there is a redundant zero on top of the stack which we eliminate with a pop. 
+
+
   \end{subquestion}
   
   % Question 4d
   \begin{subquestion}
-    \todo{Answer Question {\thesubquestion} here.}
+    Write a program in our toy language that takes as input a stack of the form n :: [] where $n \geq 0$ and
+   finishes with a stack of the form n :: (n - 1) :: \dots :: 1 :: 0 :: []. Briefly describe (in words) how your
+   implementation works. (That is, help the grader understand why your code is correct!)
+   
+   The implementation we propose is:
+   
+   \emph{push 0; whilene \{ dup; push 1; add; swap 1; swap 2; swap 1 \}; pop}.
+   
+   We first push on top of the stack a 0 and in general, before checking whilene's condition, we guarantee that on top of the stack there is the value i-1 computed during the previous iteration and the second element is n so that the loop stops when i-1 is n.
+   
+   Guaranteeing this ordering of the values i-1 as the top element and of n as the second requires the manipulation with the three swaps we have in whilene's loop body. The first three instructions in the loop body leave us with i, i-1 and n on top of the stack. The first swap changes the order to i-1, i and n; the second swap to n, i, i-1 and the last swap to i, n, i-1. If n turns out to be equal to n, the loop will stop and we have to pop a redundant n value on top.
+    
   \end{subquestion}
+  
+  
   
   % Question 4e
   \begin{subquestion}
-    \todo{Answer Question {\thesubquestion} here.}
+     Write a program that takes as input a stack of the form m :: n :: [] where $m \gt 0$ and $n \gt 0$ and finishes
+    with a stack of the form i :: [], where i is 0 if m is a multiple of n, and 1 otherwise. Briefly describe
+    (in words) how your implementation works. (That is, help the grader understand why your code is
+    correct!)
+    
   \end{subquestion}
   
     
