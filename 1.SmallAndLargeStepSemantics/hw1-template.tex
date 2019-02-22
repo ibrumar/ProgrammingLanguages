@@ -429,48 +429,115 @@ By the inductive hypothesis we know that $<e_1, \sigma> \stepsone <e_1', \sigma'
 \newcommand{\cons}[2]{\ensuremath{#1 :: #2}}
 
 %% Here are some useful macros/code for this questions. Try uncommenting them to see what they do.
-%% $<\push{3}; \pop; \whilene{\push{6};\push{7};\mul}, \stack>$
+% $<\push{3}; \pop; \whilene{\push{6};\push{7};\mul}, \stack>$
 
-%% $<\push{8},S> \stepsto \cons{8}{S}$
+% $<\push{8},S> \stepsto \cons{8}{S}$
 
 
   \begin{subquestion}
     \begin{subsubquestion}
-      Command $\push{n}$: \todo{Answer Question {\thesubquestion} here.}
+      Command $\push{n}$: 
+      
+      \infrule[PUSH]
+      {
+      	
+      }
+      {
+      	<$\push n$, $\stack$> \stepsto $\cons{n}{S}$
+      }
+      {
+      	%where m is the factorial of n
+      }
     \end{subsubquestion}
     \begin{subsubquestion}
-      Command $\pop$: \todo{Answer Question {\thesubquestion} here.}
+      Command $\pop$: No more inference rules to add.
     \end{subsubquestion}
     \begin{subsubquestion}
-      Command $\add$: \todo{Answer Question {\thesubquestion} here.}
+      Command $\add$:
+      
+      \infrule[ADD]
+      {
+      	
+      }
+      {
+      	<$\add$, $\cons{\cons{n}{m}}{S}$> \stepsto $\cons{k}{S}$
+      }
+      {
+      	where k is the sum of n and m.
+      }
     \end{subsubquestion}
     \begin{subsubquestion}
-      Command $\mul$: \todo{Answer Question {\thesubquestion} here.}
+      Command $\mul$: 
+      
+      \infrule[MUL]
+      {
+      	
+      }
+      {
+      	<$\mul$, $\cons{\cons{n}{m}}{S}$> \stepsto $\cons{k}{S}$
+      }
+      {
+      	where k is the multiplication of n and m.
+      }
     \end{subsubquestion}
     \begin{subsubquestion}
-      Command $\divcom$: \todo{Answer Question {\thesubquestion} here.}
+      Command $\divcom$: No more inference rules to add.
     \end{subsubquestion}
     \begin{subsubquestion}
-      Command $\dup$: \todo{Answer Question {\thesubquestion} here.}
+      Command $\dup$: 
+      
+      \infrule[DUP]
+      {
+      	
+      }
+      {
+      	<$\dup$, $\cons{n}{S}$> \stepsto $\cons{n}{\cons{n}{S}}$
+      }
+      {
+      	%where k is the multiplication of n and m.
+      }
     \end{subsubquestion}
     \begin{subsubquestion}
-      Command $\swap{i}$: \todo{Answer Question {\thesubquestion} here.}
+      Command $\swap{i}$: No more inference rules to add.
     \end{subsubquestion}
     \begin{subsubquestion}
-      Command $\seq{c_1}{c_2}$: \todo{Answer Question {\thesubquestion} here.}
+      Command $\seq{c_1}{c_2}$: No more inference rules to add.
     \end{subsubquestion}
     \begin{subsubquestion}
-      Command $\whilene{c}$: \todo{Answer Question {\thesubquestion} here.}
+      Command $\whilene{c}$: 
+      
+      \infrule[WHILENE2]
+      {
+      	<$c, \cons{\cons{n_0}{n_1}}{S}$> \stepsto $\stack''$ <$\whilene{c}$, $\stack''$> \stepsto $\stack'$
+      }
+      {
+      	<$\whilene{c}$, $\cons{n_0}{\cons{n_1}{S}}$> \stepsto $\stack'$
+      }
+      {
+      	$n_0 \ne n_1$
+      }
+      
     \end{subsubquestion}
     \begin{subsubquestion}
-      Command $\skip$: \todo{Answer Question {\thesubquestion} here.}
+      Command $\skip$: 
+      
+      \infrule[SKIP]
+      {
+      	
+      }
+      {
+      	<$\skip$, $\stack$> \stepsto $\stack$
+      }
+      {
+      	%where k is the multiplication of n and m.
+      }
     \end{subsubquestion}
 
   \end{subquestion}
 
   % Question 4b
   \begin{subquestion}
-    < push 0; whilene { pop; dup; push -1; +; push 0 }; pop, 3 :: [] >
+    \todo{this still needs to be done}.
   \end{subquestion}
   
   % Question 4c
@@ -514,7 +581,18 @@ The program we propose is:\\
      Write a program that takes as input a stack of the form m :: n :: [] where $m \gt 0$ and $n \gt 0$ and finishes
     with a stack of the form i :: [], where i is 0 if m is a multiple of n, and 1 otherwise. Briefly describe
     (in words) how your implementation works. (That is, help the grader understand why your code is
-    correct!)
+    correct!).
+    
+    The solution we propose is:
+    
+    \emph{dup; swap 2; dup; swap 2; div; mul; div; ; push -1; mul; push 1; add}.
+    
+    The program is divided in two parts. The last div outputs a 1 if m is a multiple of n and a 0 if it is not. The next 4 instructions just invert 0 for a 1 and 1 for a 0.
+    
+    In the first four instructions before the first division leave the stack in a format of m :: n :: n :: m. The reason for this is that we first want to divide m by n to produce q. We know that if we multiply q by n the result is smaller or equal to m. If it is not equal, it means that m is not divisible by n. The next step is to divide n*q by m. If the result is one it means that they were equal but the integer division will return zero otherwise.
+    
+    In the second part in order to invert the result 'p' in the previous paragraph , we change its sign (by multiplying with -1) and add one to that. If p was 0, changing the sign has no effect and by adding one, the overall result is one. If p was 1, changing the sign results in -1 and adding 1 to that gives 0.
+    
     
   \end{subquestion}
   

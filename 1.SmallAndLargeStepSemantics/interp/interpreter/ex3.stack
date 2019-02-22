@@ -1,1 +1,1 @@
-< dup; swap 2; dup; swap 2; /; *; /, 8 :: 4 :: [] >                
+< dup; swap 2; dup; swap 2; /; *; /; push -1; *; push 1; +, 8 :: 4 :: [] >                
