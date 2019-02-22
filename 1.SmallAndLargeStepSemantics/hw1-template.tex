@@ -537,7 +537,10 @@ By the inductive hypothesis we know that $<e_1, \sigma> \stepsone <e_1', \sigma'
 
   % Question 4b
   \begin{subquestion}
-    \todo{this still needs to be done}.
+     Give a configuration that gets stuck. That is, give a configuration <c, \stack>, such that there does not exist a stack S' where $<c, S> \stepsto S'$.
+     
+     An infinite loop that keeps modifying the stack will prevent the election of a fixed target S'. An example would be $\whilene{\push{1}}, []$.
+    
   \end{subquestion}
   
   % Question 4c
