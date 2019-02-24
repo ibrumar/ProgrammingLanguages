@@ -89,14 +89,14 @@
    \begin{subquestion}
    Extend the small step semantics to handle modulo expressions. \\
 
-   The rules are defined similarly to how we dealt with the factorial, but now with two operands and having to define the order of evaluation. In order to match the large step semantics, we first evaluate the first operand of the modulo operation.
+   The rules are defined similarly to how we dealt with the factorial, but now with two operands and having to define the order of evaluation. We first evaluate the first operand of the modulo operation.
 
    \infrule[LMOD]
            {
              <e_1, \sigma> \stepsone <e_1', \sigma'>
            }
            {
-             <\modulo{e_1}{e_2}, \sigma> \stepsone <\modulo{e_1'}{e_2}, \sigma''>
+             <\modulo{e_1}{e_2}, \sigma> \stepsone <\modulo{e_1'}{e_2}, \sigma'>
            }
            {
              %side condition
@@ -127,83 +127,89 @@
              <\modulo{n}{m}, \sigma> \stepsone <k, \sigma>
            }
            {
-             where k is n modulo m
+             where k is n modulo m and $m > 0$.
            }
 \end{subquestion}
 
 \begin{subquestion}
 What happens when we try to evaluate the expression $\modulo{(\fact{3})}{(-7)}$ having a store $\sigma_0$ that maps all the variables to 0.
 
-Let us first use the large step semantics:
+The problem is that the second operand of the modulo operation is negative and the extension of the large step semantics defined in this exercise only allows for the second value to be strictly positive. The rule that we cannot apply is $MOD_{LRG}$.
 
-   \infrule[$MOD_{LRG}$]
-           {
+Also our extension of the small step semantics results in the same constraint. The rule that we cannot apply is $MOD$.
+
+
+
+%Let us first use the large step semantics:
+
+%   \infrule[$MOD_{LRG}$]
+%           {
              %<e, \sigma> \stepsone <n, \sigma'>
 
-             \infrule[$FACT_{LRG}$]
-                     {
-                        \infrule[$INT_{LRG}$]
-                        {}
-                        {<3, \sigma_0> \stepsone <3, \sigma_0>}
+%             \infrule[$FACT_{LRG}$]
+%                     {
+%                        \infrule[$INT_{LRG}$]
+%                        {}
+%                        {<3, %\sigma_0> \stepsone <3, \sigma_0>}
                      
-                     }
-                     {
-                        <\fact{3}, \sigma_0> \stepsto <6, \sigma_0>
-                     }  {}
+%                     }
+%                     {
+%                        %<\fact{3}, \sigma_0> \stepsto <6, \sigma_0>
+%                     }  {}
 
-             \infrule[$INT_{LRG}$]
-                     {
-                       %<3, \sigma> \stepsone <3, \sigma>
-                     }
-                     {
-                       <-7, \sigma_0> \stepsto <-7, \sigma_0>
-                     }
-                     {}
-           }
-           {
-             <\modulo{(\fact{3})}{(-7)}, \sigma_0> \stepsto <1, \sigma_0>
-           }
-           {
-             where 1 is 6 mod -7
-           }
-    Since there is no assignment in the derivation tree, sigma stays the same.
+%             \infrule[$INT_{LRG}$]
+%                     {
+                       %<3, %\sigma> %\stepsone %<3, %\sigma>
+                     %}
+                     %{
+                     %  <-7, %\sigma_0> %\stepsto %<-7, %\sigma_0>
+                     %}
+                     %{}
+          % }
+          % {
+          %   %<\modulo{(\fact{3})}{(-%7)}, \sigma_0> %\stepsto <1, \sigma_0>
+          % }
+          % {
+          %   where 1 is 6 mod -7
+          % }
+    %Since there is no assignment in the derivation tree, sigma stays the same.
 
-    With the small step semantics the resulting derivations in order to prove that we can make the step $<\modulo{(\fact{3})}{(-7)}, \sigma_0> \stepsone <\modulo{(6)}{(-7)}, \sigma_0>$.
+    %With the small step semantics the resulting derivations in order to prove that we can make the step $<\modulo{(\fact{3})}{(-7)}, \sigma_0> \stepsone <\modulo{(6)}{(-7)}, \sigma_0>$.
 
 
-   \infrule[LMOD]
-           {
+   %\infrule[LMOD]
+   %        {
+             %<e, \sigma> %\stepsone <n, %\sigma'>
+
+%             \infrule[$Fact$]
+%                     {
+%                     }
+%                     {
+                        %<\fact{3}%, %\sigma_0>% %\stepsto %\sigma_0>
+                    % }  {}
+          % }
+          % {
+          %   %<\modulo{(\fact{3})}{(-7)}, \sigma_0> \stepsone<1, \sigma_0>
+          % }
+          % {
+          %   %where 1 is 6 mod -7
+          % }
+
+%    Then to show that $<\modulo{(6)}{(-7)}, \sigma_0> \stepsone <1, \sigma_0>$.
+
+
+%   \infrule[MOD]
+%           {
              %<e, \sigma> \stepsone <n, \sigma'>
+%           }
+%           {
+%             <\modulo{(\fact{3})}{(-7)}, %\sigma_0> \stepsone<1, \sigma_0>
+ %          }
+ %          {
+ %            where 1 is 6 mod -7
+ %          }
 
-             \infrule[$Fact$]
-                     {
-                     }
-                     {
-                        <\fact{3}, \sigma_0> \stepsto <6, \sigma_0>
-                     }  {}
-           }
-           {
-             <\modulo{(\fact{3})}{(-7)}, \sigma_0> \stepsone<1, \sigma_0>
-           }
-           {
-             %where 1 is 6 mod -7
-           }
-
-    Then to show that $<\modulo{(6)}{(-7)}, \sigma_0> \stepsone <1, \sigma_0>$.
-
-
-   \infrule[MOD]
-           {
-             %<e, \sigma> \stepsone <n, \sigma'>
-           }
-           {
-             <\modulo{(\fact{3})}{(-7)}, \sigma_0> \stepsone<1, \sigma_0>
-           }
-           {
-             where 1 is 6 mod -7
-           }
-
-   In both cases the $\sigma_0$ does not influence any of the derivations since there are no variable assignments involved.
+   %In both cases the $\sigma_0$ does not influence any of the derivations since there are no variable assignments involved.
 
 \end{subquestion}
 %   \infrule[FactExp]
@@ -491,9 +497,11 @@ for the property you stated above in Question 2(d).ii.
    	 \item $P(<x := k; e_2, \sigma> \stepsone <e_2, \sigma[x \rightarrow n]>)$.
   	 %\item $P(<e, \sigma> \stepsone <x, \sigma'>)$ with $x \in Var$.
 %  	 \item $P(<e, \sigma> \stepsone <n, \sigma'>)$ with $n \in \mathbb{Z}$.
-   	 \item $\forall e_1, e_2 \in AExp$ if $P(<e_1, \sigma> \stepsone <e_1', \sigma'>)$ then $P(<e_1+e_2, \sigma> \stepsone <e_1'+e_2, \sigma'>)$.
+   	 \item $\forall e_1, e_2 \in AExp, \exists e_1' \in AExp$ if $P(<e_1, \sigma> \stepsone <e_1', \sigma'>)$ then $P(<e_1+e_2, \sigma> \stepsone <e_1'+e_2, \sigma'>)$.
    	 \item $\forall e_2 \in AExp$ and $, \forall k \in \mathbb{Z}$ if $P(<e_2, \sigma> \stepsone <e_2', \sigma'>)$ then $P(<k+e_2, \sigma> \stepsone <k+e_2', \sigma'>)$.
-   	 \item $\forall e_1 \in AExp$ and $e_2 \in Aexp$ if $P(<e_1, \sigma> \stepsone <e_1', \sigma'>)$ and $P(<e_2, \sigma> \stepsone <e_2', \sigma'>)$ then $P(<e_1 \times e_2, \sigma> \stepsone <e_1' \times e_2', \sigma'>)$.
+   	 \item $\forall e_1, e_2 \in AExp$ if $P(<e_1, \sigma> \stepsone <e_1', \sigma'>)$ then $P(<e_1 \times e_2, \sigma> \stepsone <e_1' \times e_2, \sigma'>)$.
+   	 \item $\forall e_2 \in AExp$ and $, \forall k \in \mathbb{Z}$ if $P(<e_2, \sigma> \stepsone <e_2', \sigma'>)$ then $P(<k \times e_2, \sigma> \stepsone <k \times e_2', \sigma'>)$.
+  	 %\item if $P(<e_1, \sigma> \stepsone <e_1', \sigma'>)$ $P(<x := e_1; e_2, \sigma> \stepsone <x := e_1'; e_2, \sigma'>)$.
   	 \end{itemize}
    	 then $\forall <e, \sigma> \in Config, \exists <e', \sigma'> \in Config, P(<e, \sigma> \stepsone <e', \sigma'>)$.
   	 
@@ -548,7 +556,7 @@ From $<p, \sigma''> \stepsto <n, \sigma>)$ we deduce that $\sigma'' = \sigma$ an
 
 What we try to prove is $<i+k, \sigma> \stepsto <n, \sigma>$ and we have seen in the previous paragraph that $n = p$ and we also know that $p = i + k$ because $<i+k, \sigma> \stepsone <p, \sigma''>)$. We can therefore transform the statement we want to prove to $<n, \sigma> \stepsto <n, \sigma>$ which is true according to large step semantics axiom $VAR_{LRG}$.
 
-\item Case 3 The full statement we need to prove is: if $<i \times k, \sigma> \stepsone <p, \sigma''>)$ and $<p, \sigma''> \stepsto <n, \sigma>)$ then $<i times k, \sigma> \stepsto <n, \sigma>$.
+\item Case 3 The full statement we need to prove is: if $<i \times k, \sigma> \stepsone <p, \sigma''>)$ and $<p, \sigma''> \stepsto <n, \sigma>)$ then $<i \times k, \sigma> \stepsto <n, \sigma>$.
 
 As in case 2, from $<p, \sigma''> \stepsto <n, \sigma>)$ we deduce that $\sigma'' = \sigma$ and that $n = p$. 
 
@@ -592,11 +600,9 @@ From $<x := k; e_2, \sigma> \stepsone <e_2, \sigma''>$ we deduce that $\sigma'' 
 
 
 %still have to complete everything else after case 3.
-\item Case 5. We show that $\forall e_1 \in AExp$ $P(<e_1, \sigma> \stepsone <e_1', \sigma'>)$ then $P(<e_1+e_2, \sigma> \stepsone <e_1'+e_2, \sigma'>)$.
+\item Case 5. We want to show that $\forall e_1 \in AExp$ $P(<e_1, \sigma> \stepsone <e_1', \sigma'>)$ then $P(<e_1+e_2, \sigma> \stepsone <e_1'+e_2, \sigma'>)$. More precisely we want to show that if $<e_1+e_2, \sigma> \stepsone <e_1'+e_2, \sigma''>$ and $<e_1'+e_2, \sigma''> \stepsto <n, \sigma'>$ (2) then $<e_1+e_2, \sigma> \stepsto <n, \sigma'>$.
 
-We want to prove that if $<e_1+e_2, \sigma> \stepsone <e_1'+e_2, \sigma''>$ and $<e_1'+e_2, \sigma''> \stepsto <n, \sigma'>$ then $<e_1+e_2, \sigma> \stepsto <n, \sigma'>$.
-
-The hypothesis $<e_1'+e_2, \sigma''> \stepsto <n, \sigma'>$ maps directly to the second premise in large step semantics rule $ADD_{LRG}$:
+If we knew that $e_1'$ in $<e_1'+e_2, \sigma''> \stepsto <n, \sigma'>$, we could map $e_2$ to the second premise in the large step semantics rule $ADD_{LRG}$ with $n_2 = n - n_1$ (we will later get $n_1$ through the inductive hypothesis and n is what $e_1' + e_2$ is mapped to by the large step semantics hypothesis (2)):
 
 \infrule[$ADD_{LRG}$]
 {
@@ -606,12 +612,12 @@ The hypothesis $<e_1'+e_2, \sigma''> \stepsto <n, \sigma'>$ maps directly to the
 	<e_1 + e_2, \sigma> \stepsto <n, \sigma'>
 }
 {
-	%hola
+	where n is the sum of k and $n_2$
 }
 
 We get the first premise through the inductive hypothesis. We know that $P(<e_1, \sigma_a>  \stepsone <e_1', \sigma_a'>)$ which means: $<e_1, \sigma_a> \stepsone <e_1', \sigma_a''>$ and $<e_1', \sigma_a''> \stepsto <k, \sigma_a'>$ then $<e_1, \sigma_a> \stepsto <k, \sigma_a'>$. We can then map k to $n_1$ in the $ADD_{LRG}$ rule above, and $\sigma''$ to $\sigma_a'$. We take $\sigma = \sigma_a$ and $n_2 = n - k$.
 
-We can now rewrite the $ADD_LRG$ rule like this:
+We can now rewrite the $ADD_{LRG}$ rule like this:
 
 \infrule[$ADD_{LRG}$]
 {
@@ -621,46 +627,139 @@ We can now rewrite the $ADD_LRG$ rule like this:
 	<e_1 + e_2, \sigma_a> \stepsto <n, \sigma'>
 }
 {
-	%hola
+	Where n is the sum of k and $n_2$
 }
 
-\item Case 6. We show that $\forall e_2 \in AExp, k \in \mathbb{Z}$ $P(<e_2, \sigma> \stepsone <e_2', \sigma'>)$ then $P(<k+e_2, \sigma> \stepsone <k'+e_2', \sigma'>)$.
+\item Case 6. We want to show that $\forall e_2 \in AExp, k \in \mathbb{Z}$ $P(<e_2, \sigma> \stepsone <e_2', \sigma'>)$ then $P(<k+e_2, \sigma> \stepsone <k'+e_2', \sigma'>)$. More precisely we want to show that if $<k+e_2, \sigma> \stepsone <k+e_2', \sigma''>$ (1) and $<k+e_2', \sigma''> \stepsto <n, \sigma'>$ (2) then $<k+e_2, \sigma> \stepsto <n, \sigma'>$.
 
-We want to prove that if $<e_1+e_2, \sigma> \stepsone <e_1'+e_2, \sigma''>$ and $<e_1'+e_2, \sigma''> \stepsto <n, \sigma'>$ then $<e_1+e_2, \sigma> \stepsto <n, \sigma'>$.
 
-The hypothesis $<e_1'+e_2, \sigma''> \stepsto <n, \sigma'>$ maps directly to the second premise in large step semantics rule $ADD_{LRG}$:
+We can get to the conclusion we want by using the large step semantics rule $ADD_{LRG}$:
 
 \infrule[$ADD_{LRG}$]
+{
+	<k, \sigma> \stepsto <k, \sigma> <e_2, \sigma> \stepsto <n_2, \sigma'>
+}
+{
+	<k + e_2, \sigma> \stepsto <n, \sigma'>
+}
+{
+	with n being the sum of k and $n_2$
+}
+
+The first premise comes for free thanks to the axiom $INT_{LRG}$ and the second premise comes through the inductive hypothesis. By IH, we know that $P(<e_2, \sigma_a>  \stepsone <e_2', \sigma_a'>)$ which means: $<e_2, \sigma_a> \stepsone <e_2', \sigma_a''>$ and $<e_2', \sigma_a''> \stepsto <h, \sigma_a'>$ then $<e_2, \sigma_a> \stepsto <h, \sigma_a'>$. We can then map h to $n_2$ in the $ADD_{LRG}$ rule above. We take $\sigma = \sigma_a$.
+
+We can now rewrite the $ADD_{LRG}$ rule like this:
+
+\infrule[$ADD_{LRG}$]
+{
+	<k, \sigma> \stepsto <k, \sigma> <e_2, \sigma> \stepsto <h, \sigma'>
+}
+{
+	<k + e_2, \sigma> \stepsto <n, \sigma'>
+}
+{
+	with n being the sum of k and h
+}
+
+
+
+\item Case 7 We want to show that $\forall e_1 \in AExp$ $P(<e_1, \sigma> \stepsone <e_1', \sigma'>)$ then $P(<e_1 \times e_2, \sigma> \stepsone <e_1' \times e_2, \sigma'>)$. More precisely we want to show that if $<e_1 \times e_2, \sigma> \stepsone <e_1' \times e_2, \sigma''>$ and $<e_1' \times e_2, \sigma''> \stepsto <n, \sigma'>$ (2) then $<e_1 \times e_2, \sigma> \stepsto <n, \sigma'>$.
+
+If we knew that $e_1'$ in $<e_1'  \times e_2, \sigma''> \stepsto <n, \sigma'>$, we could map $e_2$ to the second premise in the large step semantics rule $MUL_{LRG}$ with $n_2 = \frac{n} {n_1}$ (we will later get $n_1$ through the inductive hypothesis and n is what $e_1' \times e_2$ is mapped to by the large step semantics hypothesis (2)):
+
+\infrule[$MUL_{LRG}$]
 {
 	<e_1, \sigma> \stepsto <n_1, \sigma''> <e_2, \sigma''> \stepsto <n_2, \sigma'>
 }
 {
-	<e_1 + e_2, \sigma> \stepsto <n, \sigma'>
+	<e_1 \times e_2, \sigma> \stepsto <n, \sigma'>
 }
 {
-	%hola
+	where n is the product of k and $n_2$
 }
 
-We get the first premise through the inductive hypothesis. We know that $P(<e_1, \sigma_a>  \stepsone <e_1', \sigma_a'>)$ which means: $<e_1, \sigma_a> \stepsone <e_1', \sigma_a''>$ and $<e_1', \sigma_a''> \stepsto <k, \sigma_a'>$ then $<e_1, \sigma_a> \stepsto <k, \sigma_a'>$. We can then map k to $n_1$ in the $ADD_{LRG}$ rule above, and $\sigma''$ to $\sigma_a'$. We take $\sigma = \sigma_a$ and $n_2 = n - k$.
+We get the first premise through the inductive hypothesis. We know that $P(<e_1, \sigma_a>  \stepsone <e_1', \sigma_a'>)$ which means: $<e_1, \sigma_a> \stepsone <e_1', \sigma_a''>$ and $<e_1', \sigma_a''> \stepsto <k, \sigma_a'>$ then $<e_1, \sigma_a> \stepsto <k, \sigma_a'>$. We can then map k to $n_1$ in the $MUL_{LRG}$ rule above, and $\sigma''$ to $\sigma_a'$. We take $\sigma = \sigma_a$ and $n_2 = n / k$.
 
-We can now rewrite the $ADD_LRG$ rule like this:
+We can now rewrite the $MUL_{LRG}$ rule like this:
 
-\infrule[$ADD_{LRG}$]
+\infrule[$MUL_{LRG}$]
 {
 	<e_1, \sigma_a> \stepsto <k, \sigma_a'> <e_2, \sigma_a'> \stepsto <n_2, \sigma'>
 }
 {
-	<e_1 + e_2, \sigma_a> \stepsto <n, \sigma'>
+	<e_1 \times e_2, \sigma_a> \stepsto <n, \sigma'>
 }
 {
-	%hola
+	Where n is the product of k and $n_2$
 }
 
+\item Case 8 We want to show that $\forall e_2 \in AExp, k \in \mathbb{Z}$ $P(<e_2, \sigma> \stepsone <e_2', \sigma'>)$ then $P(<k \times e_2, \sigma> \stepsone <k' \times e_2', \sigma'>)$. More precisely we want to show that if $<k \times e_2, \sigma> \stepsone <k \times e_2', \sigma''>$ (1) and $<k \times e_2', \sigma''> \stepsto <n, \sigma'>$ (2) then $<k \times e_2, \sigma> \stepsto <n, \sigma'>$.
 
 
-\item Case 7 \todo{Proof for addition with integer literal}.
+We can get to the conclusion we want by using the large step semantics rule $MUL_{LRG}$:
 
-\item Case 8 Multiplication \todo{This is almost copy paste of the addition}
+\infrule[$MUL_{LRG}$]
+{
+	<k, \sigma> \stepsto <k, \sigma> <e_2, \sigma> \stepsto <n_2, \sigma'>
+}
+{
+	<k \times e_2, \sigma> \stepsto <n, \sigma'>
+}
+{
+	with n being the sum of k and $n_2$
+}
+
+The first premise comes for free thanks to the axiom $INT_{LRG}$ and the second premise comes through the inductive hypothesis. By IH, we know that $P(<e_2, \sigma_a>  \stepsone <e_2', \sigma_a'>)$ which means: $<e_2, \sigma_a> \stepsone <e_2', \sigma_a''>$ and $<e_2', \sigma_a''> \stepsto <h, \sigma_a'>$ then $<e_2, \sigma_a> \stepsto <h, \sigma_a'>$. We can then map h to $n_2$ in the $ADD_{LRG}$ rule above. We take $\sigma = \sigma_a$.
+
+We can now rewrite the $MUL_{LRG}$ rule like this:
+
+\infrule[$MUL_{LRG}$]
+{
+	<k, \sigma> \stepsto <k, \sigma> <e_2, \sigma> \stepsto <h, \sigma'>
+}
+{
+	<k + e_2, \sigma> \stepsto <n, \sigma'>
+}
+{
+	with n being the sum of k and h
+}
+
+%\item Case 9. The full statement we need to prove is: if $<x := e_1; e_2, \sigma> \stepsone <x := e_1'; e_2, \sigma''>$ and $<x := e_1'; e_2, \sigma''> \stepsto <n, \sigma'>)$ then $<x := e_1; e_2, \sigma''> \stepsto <n, \sigma'>$. 
+
+%The only rule in the large step semantics that considers assignment in its conclusion is $ASG_{LRG}$ and it has the following form:
+
+%uncomment this when sending
+%\infrule[$INT_{LRG}$]
+%{
+%	<e_1, \sigma_2> \stepsto <n_1, \sigma_2''> <e_2, \sigma_2'' $[x \rightarrow	n_1]$> \stepsto <n_2, \sigma_2'>
+%}
+%{
+%	<x := e_1;e_2, \sigma_2> \stepsto <n_2, \sigma_2'>
+%}
+%{
+%}
+
+%In this context, $e_1$ is mapped to k, n1 is mapped to k as well, n2 is mapped to n, $\sigma_2$ and $\sigma_2''$ to $\sigma$ and $\sigma_2'$ to $\sigma[x \rightarrow k]$. If we rewrite the rule in this context:
+
+%uncomment this when sending
+%\infrule[$INT_{LRG}$]
+%{
+%$<k, \sigma> \stepsto <k, %\sigma> <e_2, \sigma[x %\rightarrow k]> \stepsto <n, %\sigma[x \rightarrow k]>$
+%}
+%{
+%	<x := k;e_2, \sigma> \stepsto <n, \sigma[x \rightarrow k]>
+%}
+%{
+%hola
+%}
+
+%The premise $<k, \sigma> \stepsto <k, \sigma>$ is true by the axiom $INT_{LRG}$ in the large step semantics. 
+
+%We only have to guarantee that $<e_2, \sigma[x \rightarrow k]> \stepsto <n, \sigma[x \rightarrow n]>$. We will deduce this from $<x := k; e_2, \sigma> \stepsone <e_2, \sigma''>)$ and $<e_2, \sigma''> \stepsto <n, \sigma[x \rightarrow k]>)$.
+
+%From $<x := k; e_2, \sigma> \stepsone <e_2, \sigma''>$ we deduce that $\sigma'' = \sigma[x \rightarrow k]$ according to rule ASG in the small step semantics. For this reason we can rewrite $<e_2, \sigma''> \stepsto <n, \sigma[x \rightarrow k]>)$ as $<e_2, \sigma[x \rightarrow k]> \stepsto <n, \sigma[x \rightarrow k]>)$ which is exactly the second premise of the $INT_{LRG}$ rule.
+
+
 
 \end{itemize}
     
