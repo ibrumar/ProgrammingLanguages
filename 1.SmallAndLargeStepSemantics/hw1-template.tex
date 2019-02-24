@@ -255,57 +255,215 @@ Let us first use the large step semantics:
 
   
 %%   Here are some useful macros/code for this questions. Try uncommenting them to see what they do.
-%% $\rootf{\tree{4}{5}{6}}$
+% $\rootf{\tree{4}{5}{6}}$
 
-%% $t_1=$ \Tree [.5 [.7 [.-1 ] [.3 ] ] [.4 ] ] &
 
-%% $t_1 \cong t_2$
 
-%% \begin{itemize}
-%% \item Case 1 where $e \equiv n$...
-%% \item Case 2 where $e \equiv x$...
-%% \end{itemize}
+% $t_1=$ \Tree [.5 [.7 [.-1 ] [.3 ] ] [.4 ] ] &
+
+% $t_1 \cong t_2$
+
+% \begin{itemize}
+% \item Case 1 where $e \equiv n$...
+% \item Case 2 where $e %\equiv x$...
+% \end{itemize}
+
+
 
   
   %% Question 2a
   \begin{subquestion}
-    \todo{Answer Question {\thesubquestion} here.}
+    Write inference rules defining the relation $\cong$.
+
+	We write a recursive and a base rule that consider two trees to have the same shape either if they both have two sub-trees or if they contain a single value. 
+
+    \infrule[SameShapeRec]
+	{
+	%<e, \sigma> \stepsone <n, \sigma'>
+		t1 \cong t1' t2 \cong t2'
+	}
+	{
+	
+	\tree{a}{t1}{t2} \cong \tree{a'}{t1'}{t2'} 
+	%	$. (a, t_{1}, t_{2}) \cong \tree{a'}{t_1'}{t_2'}$ 
+	}
+	{
+	where $a, a' \in \mathbb{Q}$
+	}
+
+    \infrule[SameShapeBase]
+{
+}
+{
+	
+	a1 \cong a2
+	%	$. (a, t_{1}, t_{2}) \cong \tree{a'}{t_1'}{t_2'}$ 
+}
+{
+	where $a1, a2 \in \mathbb{Q}$
+}
+    
   \end{subquestion}
 
   %% Question 2b
   \begin{subquestion}
-    \todo{Answer Question {\thesubquestion} here.}
+ Which of the following trees is are members of SixTree? For each such tree, provide a derivation
+proving its membership in SixTree.
+
+
+The tree A. is not a \textbf{SixTree} since $\tree{18}{6}{6}$ is not a base case (LEAF6 of LEAF18), it is not defined by the rule SumNode because $18 \ne 6 + 6$ and it is not defined by the rule ProdNode since $18 \ne 6\times6/6$.
   \end{subquestion}
+
+Tree B is a SixTree. Next we write the proof:
+
+%\infrule[SumNode]
+%{
+%	\infrule[ProdNode]
+%	{
+%		\infrule[LEAF6]
+%		{
+%		}
+%		{
+%			$6 \in SixTree$
+%		}
+%		{
+%		}
+%	
+%		\infrule[LEAF6]
+%		{
+%		}
+%		{
+%		$6 \in SixTree$
+%		}
+%		{
+%		}
+%	}
+%	{
+%		$\tree{6}{6}{6}$
+%	}
+%	{
+%	}
+%
+%	\infrule[LEAF18]
+%	{
+%	}
+%	{
+%	$18 \in SixTree$
+%	}
+%	{
+%	}
+%
+%}
+%{
+%	$\tree{24}{\tree{6}{6}{6}}{18}$
+%}
+%{
+%}
+
+Tree C. is not even a complete tree since it contains a node with a 6 in its root but with only one leaf and trees are either defined as being one value or a value and two leaves (sub-trees).
+
+Tree D. is not a SixTree because of the leaf with value 12. Since it is a single value, it cannot be produced by SumNode or by ProdNode. Also none of the axioms can generate it because 12 is not equal to 6 or 18.
 
   %% Question 2c
   \begin{subquestion}
-    \todo{Answer Question {\thesubquestion} here.}
+ There are some trees in SixTree that have multiple derivations. That is, there are trees t such that there
+are multiple and distinct derivations showing that $t \in SixTree$. Give one of these trees, and show two
+distinct derivations of its membership in SixTree.
+
+One of those SixTrees is 18. We know that because of the derivation LEAF18 and by considering the tree (18, (12, 6, 6), 6). The derivations for the latter are:
+
+%\infrule[SumNode]
+%{
+%	\infrule[SumNode]
+%	{
+%		\infrule[LEAF6]
+%		{
+%		}
+%		{
+%			$6 \in SixTree$
+%		}
+%		{
+%		}
+%		
+%		\infrule[LEAF6]
+%		{
+%		}
+%		{
+%			$6 \in SixTree$
+%		}
+%		{
+%		}
+%	}
+%	{
+%		$\tree{12}{6}{6}$
+%	}
+%	{
+%	}
+%	
+%	\infrule[LEAF6]
+%	{
+%	}
+%	{
+%		$6 \in SixTree$
+%	}
+%	{
+%	}
+%	
+%}
+%{
+%	$\tree{18}{\tree{12}{6}{6}}{6}$
+%}
+%{
+%}
   \end{subquestion}
 
   %% Question 2d
   \begin{subquestion} 
     
     \begin{subsubquestion}
-    \todo{Answer Question {\thesubsubquestion} here.}      
+    What is the inductive reasoning principle for the set SixTree? Write it out in full.
+         
+    The inductive reasoning principle for the SixTree is;
+    
+    If: 
+    
+    \begin{itemize}
+    	\item P(6) and P(18) are true.
+    	\item $\forall t_1, t_2 \in SixTree$ if $P(t_1)$ and $P(t_2)$ is true then $P((a, t_1, t_2))$ is true, with $a = root(t_1) + root(t_2)$.
+    	\item $\forall t_1, t_2 \in SixTree$ if $P(t_1)$ and $P(t_2)$ is true then $P((a, t_1, t_2))$ is true, with $a = \frac{root(t_1) \times root(t_2)}{6}$.
+    \end{itemize}
+
+	then:
+	
+	$\forall t \in SixTree P(t)$.
+
     \end{subsubquestion}
     \begin{subsubquestion}
-    \todo{Answer Question {\thesubsubquestion} here.}      
+What is the property that you are proving by induction? Write it out in full, in the form -For all
+$t \in SixTree$, we will prove the property $P(t) = \dots$-.
+
+We will prove $P(t) = \exists i \in \mathbb{Z}$ s.t. $root(t) = 6*i$. Note that this is a stronger statement that what is initially required by this question but if we can show that this is true, it will also be true that the root of any SixTree can only contain even numbers.
+    
     \end{subsubquestion}
     \begin{subsubquestion}
-    \todo{Answer Question {\thesubsubquestion} here.}      
+ For each case mentioned in your inductive reasoning principle for SixTree, prove that case holds
+for the property you stated above in Question 2(d).ii.
+   
+   For the rule LEAF6 we see that the property holds, i.e. $\exists i\in \mathbb{Z}$ s.t. $6 = i*6$. We pick $i = 1$.
+   
+   For the rule LEAF18 we see that the property holds as well, i.e. $\exists i\in \mathbb{Z}$ s.t. $18 = i*6$. We pick $i = 3$.
+   
+   This was the base case but let us now see the inductive case.
+   
+   We first focus on the inference rule SumNode. We first suppose that $\forall t_1, t_2 \in SixTree, \exists i,j \in \mathbb{Z}$  s.t. $root(t_1)=6*i$ and  $root(t_2)=6*j$. We have to show that $\exists k\in \mathbb{Z}$ s.t. $root((a, t1, t2)) = 6 \times k$. We have $root((a, t_1, t_2)) = a$ with $a = root(t_1) + root(t_2)$ according to the SumNode rule. $a = root(t_1) + root(t_2) = 6*i + 6*j = 6*(i + j)$. Therefore we can pick $k = i + j$.
+   
+   We next prove that the property works for ProdNode. We first suppose that $\forall t_1, t_2 \in SixTree, \exists i,j \in \mathbb{Z}$ s.t. $root(t_1)=6*i$ and  $root(t_2)=6*j$. We have to show that $\exists k \in \mathbb{Z}$ s.t. $root(()a, t1, t2)) = 6 \times k$. We have $root((a, t_1, t_2)) = a$ with $a = \frac{root(t_1) \times root(t_2)}{6}$ according to the ProdNode rule. $\frac{root(t_1) \times root(t_2)}{6} = \frac{6i \times 6j}{6} = 6ij$. Therefore we can pick $k = i*j$.
+   
+   
+   Given that $\forall t \in SixTree. \exists \in \mathbb{Z}. root(t)=6k$ implies that $\forall t \in SixTree. \exists \in \mathbb{Z}. root(t)=2*(3*k)$. 
     \end{subsubquestion}
   \end{subquestion}
 
-
-  
-  \begin{subquestion}
-    \begin{subsubquestion}
-    \todo{Answer Question {\thesubsubquestion} here.}      
-    \end{subsubquestion}
-    \begin{subsubquestion}
-    \todo{Answer Question {\thesubsubquestion} here.}      
-    \end{subsubquestion}
-  \end{subquestion}
 \end{question}
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -327,14 +485,14 @@ Let us first use the large step semantics:
   	 
   	 If
   	 \begin{itemize}
-  	 \item $P(<x, \sigma> \stepsone <n, \sigma'>)$ with $x \in Var$ and $n \in \mathbb{Z}$.
-   	 \item $P(<n+m, \sigma> \stepsone <p, \sigma'>)$ with $n,m,p \in \mathbb{Z}$ and p being the sum of n and m.
-   	 \item $P(<n \times m, \sigma> \stepsone <p, \sigma'>)$ with $n,m,p \in \mathbb{Z}$ and p being the product of n and m.
-   	 \item $P(<n \times m, \sigma> \stepsone <p, \sigma'>)$ with $n,m,p \in \mathbb{Z}$ and p being the product of n and m.
+  	 \item $P(<x, \sigma> \stepsone <n, \sigma>)$ with $x \in Var$, $n \in \mathbb{Z}$ and $\sigma(x) = n$.
+   	 \item $P(<i+k, \sigma> \stepsone <p, \sigma'>)$ with $i,k,p \in \mathbb{Z}$ and p being the sum of n and m.
+   	 \item $P(<i \times k, \sigma> \stepsone <p, \sigma'>)$ with $i,k,p \in \mathbb{Z}$ and p being the product of n and m.
+   	 \item $P(<x := k; e_2, \sigma> \stepsone <e_2, \sigma[x \rightarrow n]>)$.
   	 %\item $P(<e, \sigma> \stepsone <x, \sigma'>)$ with $x \in Var$.
 %  	 \item $P(<e, \sigma> \stepsone <n, \sigma'>)$ with $n \in \mathbb{Z}$.
    	 \item $\forall e_1, e_2 \in AExp$ if $P(<e_1, \sigma> \stepsone <e_1', \sigma'>)$ then $P(<e_1+e_2, \sigma> \stepsone <e_1'+e_2, \sigma'>)$.
-   	 \item $\forall e_2 \in AExp$ and $, \forall n \in \mathbb{Z}$ if $P(<e_2, \sigma> \stepsone <e_2', \sigma'>)$ then $P(<n+e_2, \sigma> \stepsone <n+e_2', \sigma'>)$.
+   	 \item $\forall e_2 \in AExp$ and $, \forall k \in \mathbb{Z}$ if $P(<e_2, \sigma> \stepsone <e_2', \sigma'>)$ then $P(<k+e_2, \sigma> \stepsone <k+e_2', \sigma'>)$.
    	 \item $\forall e_1 \in AExp$ and $e_2 \in Aexp$ if $P(<e_1, \sigma> \stepsone <e_1', \sigma'>)$ and $P(<e_2, \sigma> \stepsone <e_2', \sigma'>)$ then $P(<e_1 \times e_2, \sigma> \stepsone <e_1' \times e_2', \sigma'>)$.
   	 \end{itemize}
    	 then $\forall <e, \sigma> \in Config, \exists <e', \sigma'> \in Config, P(<e, \sigma> \stepsone <e', \sigma'>)$.
@@ -355,44 +513,154 @@ Let us first use the large step semantics:
 
 
 \begin{itemize}
-\item Case 1 where we have to show that $P(<e, \sigma> \stepsone <n, \sigma'>)$.
+%\item Case 1 where we have to show that $P(<e, \sigma> \stepsone <n, \sigma'>)$.
 
-The full statement we need to prove is: if $<e, \sigma> \stepsone <n, \sigma''>)$ and $<n, \sigma''> \stepsto <n, \sigma'>)$ then $<e, \sigma> \stepsto <n, \sigma'>$.
-
-%We can see that $\sigma = \sigma''$ since the only rules with the conclusion $<e, \sigma> \stepsone <n, \sigma''>$ are VAR, ADD and MUL. In all those cases the store does not change.
-
-From $<n, \sigma''> \stepsto <n, \sigma'>)$ we find that $\sigma'' = \sigma'$. This is true since the only large step semantics rule with $<n, \sigma''> \stepsto <n, \sigma'>$ as a conclusion is $INT_{LRG}$ and in that rule the store does not change.
-
-Since $\sigma'' = \sigma'$, we can transform the hypothesis $<e, \sigma> \stepsone <n, \sigma''>$ to $<e, \sigma> \stepsone <n, \sigma'>$. This implies that $<e, \sigma> \stepsone^* <n, \sigma'>$ and given that $<n, \sigma'>$ is a final configuration we conclude that $<e, \sigma> \stepsto <n, \sigma'>)$.
-
-
-
-\item Case 2 where we have to show that $P(<e, \sigma> \stepsone <x, \sigma'>)$.
-
-The argument proceeds similarly to Case 1.
+%The full statement we need to prove is: if $<e, \sigma> \stepsone <n, \sigma''>)$ and $<n, \sigma''> \stepsto <n, \sigma'>)$ then $<e, \sigma> \stepsto <n, \sigma'>$.
 
 %We can see that $\sigma = \sigma''$ since the only rules with the conclusion $<e, \sigma> \stepsone <n, \sigma''>$ are VAR, ADD and MUL. In all those cases the store does not change.
 
-From $<x, \sigma''> \stepsto <n, \sigma'>)$ we deduce that $\sigma'' = \sigma'$. This is true since the only large step semantics rule with $<x, \sigma''> \stepsto <n, \sigma'>$ as a conclusion is $VAR_{LRG}$ having $\sigma'(x) = n$ and in that rule the store does not change.
+%From $<n, \sigma''> \stepsto <n, \sigma'>)$ we find that $\sigma'' = \sigma'$. This is true since the only large step semantics rule with $<n, \sigma''> \stepsto <n, \sigma'>$ as a conclusion is $INT_{LRG}$ and in that rule the store does not change.
 
-Since $\sigma'' = \sigma'$, we can transform the hypothesis $<e, \sigma> \stepsone <x, \sigma''>$ to $<e, \sigma> \stepsone <x, \sigma'>$. From the previous step we also know that $\sigma'(x) = n$, meaning that $<x, \sigma'> \stepsto <n, \sigma'>$ according to the small step semantics axiom VAR.
+%Since $\sigma'' = \sigma'$, we can transform the hypothesis $<e, \sigma> \stepsone <n, \sigma''>$ to $<e, \sigma> \stepsone <n, \sigma'>$. This implies that $<e, \sigma> \stepsone^* <n, \sigma'>$ and given that $<n, \sigma'>$ is a final configuration we conclude that $<e, \sigma> \stepsto <n, \sigma'>)$.
 
 
-Putting together the two small step semantics rules $<e, \sigma> \stepsone <x, \sigma'>$ and $<x, \sigma'> \stepsto <n, \sigma'>$ implies that $<e, \sigma> \stepsone^* <n, \sigma'>)$ and given that $<n, \sigma'>$ is a final configuration we conclude that $<e, \sigma> \stepsto <n, \sigma'>)$.
 
-\item Case 3 \todo{We have to do the proof for the assignment as well}.
+\item Case 1 where we have to show that $P(<x, \sigma> \stepsone <n, \sigma'>)$.
 
-\item Case 4 where we have to show that $\forall e_1 \in AExp$ and $e_2 \in Aexp$ if $P(<e_1, \sigma> \stepsone <e_1', \sigma'>)$ and $P(<e_2, \sigma> \stepsone <e_2', \sigma'>)$ then $P(<e_1+e_2, \sigma> \stepsone <e_1'+e_2', \sigma'>)$.
+The full statement we need to prove is: if $<x, \sigma> \stepsone <n, \sigma''>)$ and $<n, \sigma''> \stepsto <n, \sigma>)$ then $<x, \sigma> \stepsto <n, \sigma>$.
 
-We want to prove that if $<e_1+e_2, \sigma> \stepsone <e_1'+e_2', \sigma''>$ and $<e_1'+e_2', \sigma''> \stepsto <n, \sigma'>$ then $<e_1+e_2, \sigma''> \stepsto <n, \sigma'>$.
+%We can see that $\sigma = \sigma''$ since the only rules with the conclusion $<e, \sigma> \stepsone <n, \sigma''>$ are VAR, ADD and MUL. In all those cases the store does not change.
 
-If $<e_1+e_2, \sigma> \stepsone <e_1'+e_2', \sigma''>$ it can only mean that 
+From $<n, \sigma''> \stepsto <n, \sigma>)$ we deduce that $\sigma'' = \sigma$. This is true since the only large step semantics rule with $<n, \sigma''> \stepsto <n, \sigma>$ as a conclusion is $INT_{LRG}$.
 
-By the inductive hypothesis we know that $<e_1, \sigma> \stepsone <e_1', \sigma''>$ and $<e_1', \sigma''> \stepsto <n_1, \sigma'>$ then $<e_1', \sigma''> \stepsto <n_1, \sigma'>$.
+Since $\sigma'' = \sigma$, we can transform the hypothesis $<x, \sigma> \stepsone <n, \sigma''>$ to $<x, \sigma> \stepsone <n, \sigma>$. The only inference rule in the small step semantics with this conclusion is VAR. This implies that $\sigma' = \sigma$ and that $n = \sigma(x)$. 
 
-\item Case 5 \todo{Proof for addition with integer literal}.
+The conclusion that we try to prove which is $<x, \sigma> \stepsto <n, \sigma>$, can only be inferred by the large step semantics rule  $VAR_{LRG}$ and it requires that $\sigma = \sigma'$ which is the case as we have seen in the previous two paragraphs, and it requires that $\sigma(x) = n$ which is true as shown in the previous paragraph.
 
-\item Case 6 Multiplication \todo{This is almost copy paste of the addition}
+%From the previous paragraph we also know that $\sigma'(x) = n$, meaning that $<x, \sigma'> \stepsto <n, \sigma'>$ according to the small step semantics axiom VAR.
+
+
+%Putting together the two small step semantics rules $<x, \sigma> \stepsone <n, \sigma'>$ and $<n, \sigma'> \stepsto <n, \sigma'>$ implies that $<x, \sigma> \stepsone^* <n, \sigma'>)$ and given that $<n, \sigma'>$ is a final configuration we conclude that $<x, \sigma> \stepsto <n, \sigma'>)$.
+
+\item Case 2 The full statement we need to prove is: if $<i+k, \sigma> \stepsone <p, \sigma''>)$ and $<p, \sigma''> \stepsto <n, \sigma>)$ then $<i+k, \sigma> \stepsto <n, \sigma>$.
+
+From $<p, \sigma''> \stepsto <n, \sigma>)$ we deduce that $\sigma'' = \sigma$ and that $n = p$. This is true since the only large step semantics rule with $<p, \sigma''> \stepsto <n, \sigma>$ as a conclusion is $INT_{LRG}$ and it has the above mentioned constraints.
+
+What we try to prove is $<i+k, \sigma> \stepsto <n, \sigma>$ and we have seen in the previous paragraph that $n = p$ and we also know that $p = i + k$ because $<i+k, \sigma> \stepsone <p, \sigma''>)$. We can therefore transform the statement we want to prove to $<n, \sigma> \stepsto <n, \sigma>$ which is true according to large step semantics axiom $VAR_{LRG}$.
+
+\item Case 3 The full statement we need to prove is: if $<i \times k, \sigma> \stepsone <p, \sigma''>)$ and $<p, \sigma''> \stepsto <n, \sigma>)$ then $<i times k, \sigma> \stepsto <n, \sigma>$.
+
+As in case 2, from $<p, \sigma''> \stepsto <n, \sigma>)$ we deduce that $\sigma'' = \sigma$ and that $n = p$. 
+
+What we try to prove is $<i \times k, \sigma> \stepsto <n, \sigma>$ and we have seen in the previous paragraph that $n = p$ and we also know that $p = i \times k$ because $<i+k, \sigma> \stepsone <p, \sigma''>)$. We can therefore transform the statement we want to prove to $<n, \sigma> \stepsto <n, \sigma>$ which is true according to large step semantics axiom $VAR_{LRG}$.
+
+
+\item Case 4. The full statement we need to prove is: if $<x := k; e_2, \sigma> \stepsone <e_2, \sigma''>)$ and $<e_2, \sigma''> \stepsto <n, \sigma[x \rightarrow k]>)$ then $<x := k; e_2, \sigma''> \stepsto <n, \sigma[x \rightarrow k]>$. 
+
+The only rule in the large step semantics that considers assignment in its conclusion is $ASG_{LRG}$ and it has the following form:
+
+%uncomment this when sending
+%\infrule[$INT_{LRG}$]
+%{
+%	<e_1, \sigma_2> \stepsto <n_1, \sigma_2''> <e_2, \sigma_2'' $[x \rightarrow	n_1]$> \stepsto <n_2, \sigma_2'>
+%}
+%{
+%	<x := e_1;e_2, \sigma_2> \stepsto <n_2, \sigma_2'>
+%}
+%{}
+
+In this context, $e_1$ is mapped to k, n1 is mapped to k as well, n2 is mapped to n, $\sigma_2$ and $\sigma_2''$ to $\sigma$ and $\sigma_2'$ to $\sigma[x \rightarrow k]$. If we rewrite the rule in this context:
+
+%uncomment this when sending
+%\infrule[$INT_{LRG}$]
+%{
+	%$<k, \sigma> \stepsto <k, %\sigma> <e_2, \sigma[x %\rightarrow k]> \stepsto <n, %\sigma[x \rightarrow k]>$
+%}
+%{
+%	<x := k;e_2, \sigma> \stepsto <n, \sigma[x \rightarrow k]>
+%}
+%{
+%hola
+%}
+
+The premise $<k, \sigma> \stepsto <k, \sigma>$ is true by the axiom $INT_{LRG}$ in the large step semantics. 
+
+We only have to guarantee that $<e_2, \sigma[x \rightarrow k]> \stepsto <n, \sigma[x \rightarrow n]>$. We will deduce this from $<x := k; e_2, \sigma> \stepsone <e_2, \sigma''>)$ and $<e_2, \sigma''> \stepsto <n, \sigma[x \rightarrow k]>)$.
+
+From $<x := k; e_2, \sigma> \stepsone <e_2, \sigma''>$ we deduce that $\sigma'' = \sigma[x \rightarrow k]$ according to rule ASG in the small step semantics. For this reason we can rewrite $<e_2, \sigma''> \stepsto <n, \sigma[x \rightarrow k]>)$ as $<e_2, \sigma[x \rightarrow k]> \stepsto <n, \sigma[x \rightarrow k]>)$ which is exactly the second premise of the $INT_{LRG}$ rule.
+
+
+
+%still have to complete everything else after case 3.
+\item Case 5. We show that $\forall e_1 \in AExp$ $P(<e_1, \sigma> \stepsone <e_1', \sigma'>)$ then $P(<e_1+e_2, \sigma> \stepsone <e_1'+e_2, \sigma'>)$.
+
+We want to prove that if $<e_1+e_2, \sigma> \stepsone <e_1'+e_2, \sigma''>$ and $<e_1'+e_2, \sigma''> \stepsto <n, \sigma'>$ then $<e_1+e_2, \sigma> \stepsto <n, \sigma'>$.
+
+The hypothesis $<e_1'+e_2, \sigma''> \stepsto <n, \sigma'>$ maps directly to the second premise in large step semantics rule $ADD_{LRG}$:
+
+\infrule[$ADD_{LRG}$]
+{
+	<e_1, \sigma> \stepsto <n_1, \sigma''> <e_2, \sigma''> \stepsto <n_2, \sigma'>
+}
+{
+	<e_1 + e_2, \sigma> \stepsto <n, \sigma'>
+}
+{
+	%hola
+}
+
+We get the first premise through the inductive hypothesis. We know that $P(<e_1, \sigma_a>  \stepsone <e_1', \sigma_a'>)$ which means: $<e_1, \sigma_a> \stepsone <e_1', \sigma_a''>$ and $<e_1', \sigma_a''> \stepsto <k, \sigma_a'>$ then $<e_1, \sigma_a> \stepsto <k, \sigma_a'>$. We can then map k to $n_1$ in the $ADD_{LRG}$ rule above, and $\sigma''$ to $\sigma_a'$. We take $\sigma = \sigma_a$ and $n_2 = n - k$.
+
+We can now rewrite the $ADD_LRG$ rule like this:
+
+\infrule[$ADD_{LRG}$]
+{
+	<e_1, \sigma_a> \stepsto <k, \sigma_a'> <e_2, \sigma_a'> \stepsto <n_2, \sigma'>
+}
+{
+	<e_1 + e_2, \sigma_a> \stepsto <n, \sigma'>
+}
+{
+	%hola
+}
+
+\item Case 6. We show that $\forall e_2 \in AExp, k \in \mathbb{Z}$ $P(<e_2, \sigma> \stepsone <e_2', \sigma'>)$ then $P(<k+e_2, \sigma> \stepsone <k'+e_2', \sigma'>)$.
+
+We want to prove that if $<e_1+e_2, \sigma> \stepsone <e_1'+e_2, \sigma''>$ and $<e_1'+e_2, \sigma''> \stepsto <n, \sigma'>$ then $<e_1+e_2, \sigma> \stepsto <n, \sigma'>$.
+
+The hypothesis $<e_1'+e_2, \sigma''> \stepsto <n, \sigma'>$ maps directly to the second premise in large step semantics rule $ADD_{LRG}$:
+
+\infrule[$ADD_{LRG}$]
+{
+	<e_1, \sigma> \stepsto <n_1, \sigma''> <e_2, \sigma''> \stepsto <n_2, \sigma'>
+}
+{
+	<e_1 + e_2, \sigma> \stepsto <n, \sigma'>
+}
+{
+	%hola
+}
+
+We get the first premise through the inductive hypothesis. We know that $P(<e_1, \sigma_a>  \stepsone <e_1', \sigma_a'>)$ which means: $<e_1, \sigma_a> \stepsone <e_1', \sigma_a''>$ and $<e_1', \sigma_a''> \stepsto <k, \sigma_a'>$ then $<e_1, \sigma_a> \stepsto <k, \sigma_a'>$. We can then map k to $n_1$ in the $ADD_{LRG}$ rule above, and $\sigma''$ to $\sigma_a'$. We take $\sigma = \sigma_a$ and $n_2 = n - k$.
+
+We can now rewrite the $ADD_LRG$ rule like this:
+
+\infrule[$ADD_{LRG}$]
+{
+	<e_1, \sigma_a> \stepsto <k, \sigma_a'> <e_2, \sigma_a'> \stepsto <n_2, \sigma'>
+}
+{
+	<e_1 + e_2, \sigma_a> \stepsto <n, \sigma'>
+}
+{
+	%hola
+}
+
+
+
+\item Case 7 \todo{Proof for addition with integer literal}.
+
+\item Case 8 Multiplication \todo{This is almost copy paste of the addition}
 
 \end{itemize}
     
